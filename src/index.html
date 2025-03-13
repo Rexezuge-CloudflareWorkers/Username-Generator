@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .username-box {
+            font-size: 1.5em;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            width: 80%;
+            max-width: 400px;
+            background: #f8f8f8;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .generate-btn, .copy-btn {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .generate-btn:hover, .copy-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Username Generator</h1>
+    <p>Usernames are generated using a pattern of alternating consonants and vowels, followed by random digits.</p>
+    <div id="username" class="username-box">{{USERNAME}}</div>
+    <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+
+    <p>
+        <label>
+            <input type="checkbox" id="appendTTV" onchange="generateUsername()"> Append "_TTV"
+        </label>
+    </p>
+    <p>
+        <label>Number of digits:
+            <input type="number" id="numDigits" value="4" min="0" max="10" onchange="generateUsername()">
+        </label>
+    </p>
+    <p>
+        <label>Username length (pairs of letters):
+            <input type="number" id="nameLength" value="4" min="1" max="6" onchange="generateUsername()">
+        </label>
+    </p>
+
+    <button class="generate-btn" onclick="generateUsername()">Generate</button>
+
+    <p>Need to access the API directly? Visit <a href="/api" target="_blank">/api</a></p>
+
+    <script>
+        async function generateUsername() {
+            let appendTTV = document.getElementById('appendTTV').checked;
+            let numDigits = document.getElementById('numDigits').value;
+            let nameLength = document.getElementById('nameLength').value;
+
+            let response = await fetch(`/api?appendTTV=${appendTTV}&numDigits=${numDigits}&nameLength=${nameLength}`);
+            let data = await response.json();
+
+            document.getElementById('username').textContent = data.username;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('username').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied to clipboard: " + text);
+            }).catch(err => {
+                console.error("Error copying text: ", err);
+            });
+        }
+    </script>
+</body>
+
+</html>
