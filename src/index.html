@@ -8,74 +8,88 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
+        }
+
+        .container {
+            width: 500px;
+            padding: 25px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .form-group {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .username-box-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
         }
 
         .username-box {
             font-size: 1.5em;
-            margin: 10px;
             padding: 10px;
             border: 1px solid #ccc;
-            display: inline-block;
-            width: 80%;
-            max-width: 400px;
+            border-radius: 6px;
             background: #f8f8f8;
+            text-align: center;
+            flex-grow: 1;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .generate-btn,
         .copy-btn {
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
             cursor: pointer;
-            border-radius: 5px;
+            background: none;
+            border: none;
+            font-size: 22px;
         }
 
-        .generate-btn:hover,
-        .copy-btn:hover {
-            background: #0056b3;
+        .docs-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .docs-link a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .docs-link a:hover {
+            text-decoration: underline;
         }
     </style>
-</head>
-
-<body>
-    <h1>Username Generator</h1>
-    <p>Usernames are generated using a pattern of alternating consonants and vowels, followed by random digits.</p>
-    <div id="username" class="username-box">{{USERNAME}}</div>
-    <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
-
-    <p>
-        <label>
-            <input type="checkbox" id="appendTTV" onchange="generateUsername()"> Append "_TTV"
-        </label>
-    </p>
-    <p>
-        <label>Number of digits:
-            <input type="number" id="numDigits" value="4" min="0" max="10" onchange="generateUsername()">
-        </label>
-    </p>
-    <p>
-        <label>Username length (pairs of letters):
-            <input type="number" id="nameLength" value="4" min="1" max="6" onchange="generateUsername()">
-        </label>
-    </p>
-
-    <button class="generate-btn" onclick="generateUsername()">Generate</button>
-
-    <p>Need to access the API directly? Visit <a href="/docs" target="_blank">/docs</a></p>
-
     <script>
         async function generateUsername() {
-            let appendTTV = document.getElementById('appendTTV').checked;
+            let appendTTV = document.getElementById('appendTTV').value;
             let numDigits = document.getElementById('numDigits').value;
             let nameLength = document.getElementById('nameLength').value;
 
@@ -88,12 +102,48 @@
         function copyToClipboard() {
             const text = document.getElementById('username').textContent;
             navigator.clipboard.writeText(text).then(() => {
-                alert("Copied to clipboard: " + text);
+                const copyBtn = document.getElementById('copy-btn');
+                copyBtn.innerHTML = '✔';
+                setTimeout(() => copyBtn.innerHTML = '📋', 2000);
             }).catch(err => {
                 console.error("Error copying text: ", err);
             });
         }
     </script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Username Generator</h2>
+        <p>Usernames are generated using a pattern of alternating consonants and vowels, followed by random digits.</p>
+
+        <div class="username-box-container">
+            <div class="username-box" id="username">{{USERNAME}}</div>
+            <button class="copy-btn" id="copy-btn" onclick="copyToClipboard()">📋</button>
+        </div>
+
+        <div class="form-group">
+            <label for="appendTTV">Append "_TTV":</label>
+            <select id="appendTTV" onchange="generateUsername()">
+                <option value="false">False</option>
+                <option value="true">True</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="numDigits">Number of digits:</label>
+            <input type="number" id="numDigits" value="4" min="0" max="10" onchange="generateUsername()">
+        </div>
+
+        <div class="form-group">
+            <label for="nameLength">Username length (pairs of letters):</label>
+            <input type="number" id="nameLength" value="4" min="1" max="6" onchange="generateUsername()">
+        </div>
+    </div>
+
+    <div class="docs-link">
+        <p>For more details on the API, please visit the <a href="/docs" target="_blank">OpenAPI documentation</a>.</p>
+    </div>
 </body>
 
 </html>
