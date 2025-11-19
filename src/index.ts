@@ -2,9 +2,13 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { serveStatic } from "hono/cloudflare-workers";
 import { GenerateUsernameRoute } from "./endpoints/api/get";
+import { cors } from "hono/cors";
 
 // 启动 Hono 应用
 const app = new Hono();
+
+// Add CORS middleware
+app.use('*', cors());
 
 // 配置 OpenAPI
 const openapi = fromHono(app, { docs_url: "/docs" });
