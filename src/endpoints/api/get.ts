@@ -35,9 +35,12 @@ export class GenerateUsernameRoute extends OpenAPIRoute {
                 description: "Username generated successfully",
                 content: {
                     "application/json": {
-                        schema: z.object({
-                            username: z.string(),
-                        }),
+                        schema: {
+                            type: "object",
+                            properties: {
+                                username: { type: "string" }
+                            }
+                        },
                     },
                 },
             },

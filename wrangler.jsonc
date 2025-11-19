@@ -2,10 +2,19 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "username-generator",
 	"main": "src/index.ts",
-	"compatibility_date": "2025-11-19",
+	"compatibility_date": "2025-11-02",
 	"preview_urls": false,
 	"workers_dev": true,
 	"observability": {
 		"enabled": false,
+		"head_sampling_rate": 1
 	},
+	"routes": [
+	],
+	"placement": {
+		"mode": "off"
+	},
+	"assets": {
+		"directory": "./app/dist"
+	}
 }
