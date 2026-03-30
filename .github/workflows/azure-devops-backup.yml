@@ -10,6 +10,8 @@ jobs:
   backup-main-to-azure-devops:
     if: ${{ !github.event.repository.fork }}
     name: Backup main Branch
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
